@@ -9,6 +9,7 @@ router.route("/search").get(isAuthenticated, searchCourse);
 router.route("/published-courses").get( getPublishedCourse);
 router.route("/").get(isAuthenticated,getCreatorCourses);
 router.route("/:courseId").put(isAuthenticated,upload.single("courseThumbnail"),editCourse);
+router.route("/:courseId").delete(isAuthenticated, removeLecture);
 router.route("/:courseId").get(isAuthenticated, getCourseById);
 router.route("/:courseId/lecture").post(isAuthenticated, createLecture);
 router.route("/:courseId/lecture").get(isAuthenticated, getCourseLecture);

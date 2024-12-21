@@ -9,7 +9,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Switch } from "@/components/ui/switch";
 import { useEditLectureMutation, useGetLectureByIdQuery, useRemoveLectureMutation } from "@/features/api/courseApi";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
@@ -22,27 +21,24 @@ const MEDIA_API = "http://localhost:8080/api/v1/media";
 const LectureTab = () => {
   const [lectureTitle, setLectureTitle] = useState("");
   const [uploadVideInfo, setUploadVideoInfo] = useState(null);
-  const [isFree, setIsFree] = useState(false);
   const [mediaProgress, setMediaProgress] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [btnDisable, setBtnDisable] = useState(true);
   const params = useParams();
   const { courseId, lectureId } = params;
 
-  const {data:lectureData} = useGetLectureByIdQuery(lectureId);
+  const { data: lectureData } = useGetLectureByIdQuery(lectureId);
   const lecture = lectureData?.lecture;
 
-  useEffect(()=>{
-    if(lecture){
+  useEffect(() => {
+    if (lecture) {
       setLectureTitle(lecture.lectureTitle);
-      setIsFree(lecture.isPreviewFree);
       setUploadVideoInfo(lecture.videoInfo)
     }
-  },[lecture])
+  }, [lecture])
 
-  const [edtiLecture, { data, isLoading, error, isSuccess }] =
-    useEditLectureMutation();
-    const [removeLecture,{data:removeData, isLoading:removeLoading, isSuccess:removeSuccess}] = useRemoveLectureMutation();
+  const [edtiLecture, { data, isLoading, error, isSuccess }] = useEditLectureMutation();
+  const [removeLecture, { data: removeData, isLoading: removeLoading, isSuccess: removeSuccess }] = useRemoveLectureMutation();
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files[0];
@@ -58,7 +54,7 @@ const LectureTab = () => {
         });
         //console.log(lecture.videoUrl);
 
-        if (res.data.success ) {
+        if (res.data.success) {
           setUploadVideoInfo({
             videoUrl: res.data.data.url,
             publicId: res.data.data.public_id,
@@ -80,8 +76,8 @@ const LectureTab = () => {
 
     await edtiLecture({
       lectureTitle,
-      videoInfo:uploadVideInfo,
-      isPreviewFree:isFree,
+      videoInfo: uploadVideInfo,
+      isPreviewFree: isFree,
       courseId,
       lectureId,
     });
@@ -100,11 +96,11 @@ const LectureTab = () => {
     }
   }, [isSuccess, error]);
 
-  useEffect(()=>{
-    if(removeSuccess){
+  useEffect(() => {
+    if (removeSuccess) {
       toast.success(removeData.message);
     }
-  },[removeSuccess])
+  }, [removeSuccess])
 
   return (
     <Card>
@@ -119,8 +115,8 @@ const LectureTab = () => {
           <Button disbaled={removeLoading} variant="destructive" onClick={removeLectureHandler}>
             {
               removeLoading ? <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
-              Please wait
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
               </> : "Remove Lecture"
             }
           </Button>
@@ -148,10 +144,6 @@ const LectureTab = () => {
             className="w-fit"
           />
         </div>
-        <div className="flex items-center space-x-2 my-5">
-          <Switch checked={isFree} onCheckedChange={setIsFree} id="airplane-mode" />
-          <Label htmlFor="airplane-mode">Is this video FREE</Label>
-        </div>
 
         {mediaProgress && (
           <div className="my-4">
@@ -162,13 +154,13 @@ const LectureTab = () => {
 
         <div className="mt-4">
           <Button disabled={isLoading} onClick={editLectureHandler}>
-              {
-                isLoading ? <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+            {
+              isLoading ? <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Please wait
-                </> : "Update Lecture"
-              }
-            
+              </> : "Update Lecture"
+            }
+
           </Button>
         </div>
       </CardContent>

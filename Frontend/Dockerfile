@@ -1,9 +1,10 @@
 # Sử dụng image Node.js làm base image
-FROM node:14-alpine
+FROM node:22.9.0-alpine
 
 # Tạo thư mục làm việc
 WORKDIR /app
 
+RUN npm install -g npm@latest
 # Sao chép package.json và package-lock.json vào image
 COPY package*.json ./
 
@@ -17,7 +18,7 @@ COPY . .
 RUN npm run build
 
 # Expose port 5173 vite
-EXPOSE 5173
+EXPOSE 4173
 
 # Chạy ứng dụng bằng npm
 CMD ["npm", "run", "preview"]

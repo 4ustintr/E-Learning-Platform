@@ -14,16 +14,16 @@ import React, { useState } from "react";
 
 const categories = [
   { id: "Golang", label: "Golang" },
-  { id: "data science", label: "Data Science" },
-  { id: "frontend development", label: "Frontend Development" },
-  { id: "fullstack development", label: "Fullstack Development" },
+  { id: "Data Science", label: "Data Science" },
+  { id: "Frontend Development", label: "Frontend Development" },
+  { id: "Fullstack Development", label: "Fullstack Development" },
   { id: "DevOps", label: "DevOps" },
-  { id: "backend development", label: "Backend Development" },
-  { id: "javascript", label: "Javascript" },
-  { id: "python", label: "Python" },
-  { id: "docker", label: "Docker" },
-  { id: "mongodb", label: "MongoDB" },
-  { id: "html", label: "HTML" },
+  { id: "Backend Development", label: "Backend Development" },
+  { id: "Javascript", label: "Javascript" },
+  { id: "Python", label: "Python" },
+  { id: "Docker", label: "Docker" },
+  { id: "MongoDB", label: "MongoDB" },
+  { id: "HTML", label: "HTML" },
 ];
 
 const Filter = ({ handleFilterChange }) => {

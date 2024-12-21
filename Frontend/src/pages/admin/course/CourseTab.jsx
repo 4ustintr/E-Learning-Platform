@@ -26,10 +26,11 @@ import {
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRemoveCourseMutation } from "@/features/api/courseApi";
 import { toast } from "sonner";
 
 const CourseTab = () => {
-  
+
   const [input, setInput] = useState({
     courseTitle: "",
     subTitle: "",
@@ -42,14 +43,15 @@ const CourseTab = () => {
 
   const params = useParams();
   const courseId = params.courseId;
-  const { data: courseByIdData, isLoading: courseByIdLoading , refetch} =
+  const { data: courseByIdData, isLoading: courseByIdLoading, refetch } =
     useGetCourseByIdQuery(courseId);
 
-    const [publishCourse, {}] = usePublishCourseMutation();
- 
+  const [publishCourse, { }] = usePublishCourseMutation();
+  const [removeCourse, { data: removeData, isLoading: removeLoading, isSuccess: removeSuccess }] = useRemoveCourseMutation();
+
   useEffect(() => {
-    if (courseByIdData?.course) { 
-        const course = courseByIdData?.course;
+    if (courseByIdData?.course) {
+      const course = courseByIdData?.course;
       setInput({
         courseTitle: course.courseTitle,
         subTitle: course.subTitle,
@@ -103,8 +105,8 @@ const CourseTab = () => {
 
   const publishStatusHandler = async (action) => {
     try {
-      const response = await publishCourse({courseId, query:action});
-      if(response.data){
+      const response = await publishCourse({ courseId, query: action });
+      if (response.data) {
         refetch();
         toast.success(response.data.message);
       }
@@ -112,6 +114,25 @@ const CourseTab = () => {
       toast.error("Failed to publish or unpublish course");
     }
   }
+
+  const removeCourseHandler = async () => {
+    await removeCourse(courseId);
+  }
+  
+  useEffect(() => {
+      if (isSuccess) {
+        toast.success(data.message);
+      }
+      if (error) {
+        toast.error(error.data.message);
+      }
+    }, [isSuccess, error]);
+
+  useEffect(() => {
+      if (removeSuccess) {
+        toast.success(removeData.message);
+      }
+    }, [removeSuccess])
 
   useEffect(() => {
     if (isSuccess) {
@@ -122,8 +143,8 @@ const CourseTab = () => {
     }
   }, [isSuccess, error]);
 
-  if(courseByIdLoading) return <h1>Loading...</h1>
- 
+  if (courseByIdLoading) return <h1>Loading...</h1>
+
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
@@ -134,10 +155,17 @@ const CourseTab = () => {
           </CardDescription>
         </div>
         <div className="space-x-2">
-          <Button disabled={courseByIdData?.course.lectures.length === 0} variant="outline" onClick={()=> publishStatusHandler(courseByIdData?.course.isPublished ? "false" : "true")}>
+          <Button disabled={courseByIdData?.course.lectures.length === 0} variant="outline" onClick={() => publishStatusHandler(courseByIdData?.course.isPublished ? "false" : "true")}>
             {courseByIdData?.course.isPublished ? "Unpublished" : "Publish"}
           </Button>
-          <Button>Remove Course</Button>
+          <Button disbaled={removeLoading} variant="destructive" onClick={removeCourseHandler}>
+            {
+              removeLoading ? <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait.....
+              </> : "Remove Course"
+            }
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
