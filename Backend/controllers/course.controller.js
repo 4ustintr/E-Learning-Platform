@@ -149,32 +149,6 @@ export const editCourse = async (req,res) => {
     }
 }
 
-export const removeCourse = async (req,res) => {
-    try {
-        const {courseId} = req.params.courseId;
-        const course = await Course.findByIdAndDelete(courseId);
-        if(!course){
-            return res.status(404).json({
-                message:"Course not found!"
-            })
-        }
-        // delete the course thumbnail from cloudinary
-        if(course.courseThumbnail){
-            const publicId = course.courseThumbnail.split("/").pop().split(".")[0];
-            await deleteMediaFromCloudinary(publicId);
-        }
-
-        return res.status(200).json({
-            message:"Course removed successfully."
-        })
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            message:"Failed to remove course"
-        })
-    }
-}
-
 export const getCourseById = async (req,res) => {
     try {
         const {courseId} = req.params;

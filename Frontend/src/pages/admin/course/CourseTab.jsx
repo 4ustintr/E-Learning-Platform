@@ -26,7 +26,6 @@ import {
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRemoveCourseMutation } from "@/features/api/courseApi";
 import { toast } from "sonner";
 
 const CourseTab = () => {
@@ -37,7 +36,6 @@ const CourseTab = () => {
     description: "",
     category: "",
     courseLevel: "",
-    coursePrice: "",
     courseThumbnail: "",
   });
 
@@ -47,7 +45,6 @@ const CourseTab = () => {
     useGetCourseByIdQuery(courseId);
 
   const [publishCourse, { }] = usePublishCourseMutation();
-  const [removeCourse, { data: removeData, isLoading: removeLoading, isSuccess: removeSuccess }] = useRemoveCourseMutation();
 
   useEffect(() => {
     if (courseByIdData?.course) {
@@ -114,10 +111,6 @@ const CourseTab = () => {
       toast.error("Failed to publish or unpublish course");
     }
   }
-
-  const removeCourseHandler = async () => {
-    await removeCourse(courseId);
-  }
   
   useEffect(() => {
       if (isSuccess) {
@@ -157,14 +150,6 @@ const CourseTab = () => {
         <div className="space-x-2">
           <Button disabled={courseByIdData?.course.lectures.length === 0} variant="outline" onClick={() => publishStatusHandler(courseByIdData?.course.isPublished ? "false" : "true")}>
             {courseByIdData?.course.isPublished ? "Unpublished" : "Publish"}
-          </Button>
-          <Button disbaled={removeLoading} variant="destructive" onClick={removeCourseHandler}>
-            {
-              removeLoading ? <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait.....
-              </> : "Remove Course"
-            }
           </Button>
         </div>
       </CardHeader>
