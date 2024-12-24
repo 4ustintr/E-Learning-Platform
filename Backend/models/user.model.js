@@ -18,15 +18,9 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["instructor", "student"],
+        enum: ["admin", "student"],
         default: 'student'
     },
-    enrolledCourses: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Course'
-        }
-    ],
     photoUrl: {
         type: String,
         default: ""

@@ -18,12 +18,6 @@ const courseSchema = new mongoose.Schema({
     courseThumbnail:{
         type:String
     },
-    enrolledStudents:[
-        {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'User'
-        }
-    ],
     lectures:[
         {
             type:mongoose.Schema.Types.ObjectId,

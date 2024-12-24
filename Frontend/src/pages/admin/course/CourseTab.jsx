@@ -122,12 +122,6 @@ const CourseTab = () => {
     }, [isSuccess, error]);
 
   useEffect(() => {
-      if (removeSuccess) {
-        toast.success(removeData.message);
-      }
-    }, [removeSuccess])
-
-  useEffect(() => {
     if (isSuccess) {
       toast.success(data.message || "Course updated.");
     }
